@@ -1,0 +1,20 @@
+christian-daily-devotion/
+│
+├── public/
+│   ├── index.php          # Dashboard: today's devotion
+│   ├── login.php
+│   ├── register.php
+│   ├── logout.php
+│   ├── mark_read.php      # AJAX mark as read
+│   ├── style.css
+│   └── script.js
+│
+├── src/
+│   ├── db.php
+│   └── functions.php
+├── config/
+│   └── config.php
+├── database/
+│   └── database.sql
+├── .gitignore
+└── README.md
