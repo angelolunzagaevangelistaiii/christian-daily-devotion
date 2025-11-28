@@ -32,7 +32,7 @@ CREATE TABLE user_progress (
 
 -- Sample user
 INSERT INTO users (name,email,password) VALUES
-('Test User','test@example.com','$2y$10$QmVdV1C7IGqN9dW9I5tz1e9O5.1pLX/xmOZbDxYOfpEiyrJSpO1fu');
+('Test User','test@example.com','$2y$10$Ap2l0dx0uSuaoyWSQn2ToOkyp6UpH9x0LulzjhQYU7lnsrQ/szDXC');
 -- Password: 123456
 
 -- Sample devotions
@@ -40,3 +40,4 @@ INSERT INTO devotions (title, scripture, content, devotion_date) VALUES
 ('Faith in Action','James 2:17','Faith without works is dead. Let us act in faith today.',CURDATE()),
 ('God is Love','1 John 4:8','Whoever does not love does not know God. Love one another.',DATE_ADD(CURDATE(), INTERVAL 1 DAY)),
 ('Trust in Him','Proverbs 3:5','Trust in the Lord with all your heart and lean not on your own understanding.',DATE_ADD(CURDATE(), INTERVAL 2 DAY));
+
