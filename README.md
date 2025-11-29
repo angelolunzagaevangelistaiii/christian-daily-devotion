@@ -1,5 +1,5 @@
-# Christian Daily Devotion Tracker
-PHP/MySQL app for daily devotions.
+# Daily Devotion & Scripture Reminder App (PHP + MySQL + JS)
+A web app for Christians to read daily devotions, mark them as read, track progress, and manage content via an Admin panel.
 
 ## Setup Instructions
 1. Clone the repository:
@@ -18,4 +18,5 @@ PHP/MySQL app for daily devotions.
 
 ## Sample Link
 https://software.theholywrit.com/christian-daily-devotion
+
 
