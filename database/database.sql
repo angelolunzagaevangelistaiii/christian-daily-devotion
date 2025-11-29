@@ -37,7 +37,9 @@ CREATE TABLE IF NOT EXISTS admins (
 );
 
 -- INSERT INTO admins (name,email,password)
+INSERT INTO admins (name,email,password)
 VALUES ('Administrator', 'admin@example.com', '$2y$10$Ap2l0dx0uSuaoyWSQn2ToOkyp6UpH9x0LulzjhQYU7lnsrQ/szDXC');
+
 
 -- sample user (password '123456')
 INSERT INTO users (name,email,password) VALUES
@@ -52,3 +54,4 @@ INSERT INTO devotions (title, scripture, content, date) VALUES
 ('Walking in Faith', 'Hebrews 11:1', 'Now faith is the assurance of things hoped for, the conviction of things not seen. Walk by faith daily, trusting in God even when you cannot see the outcome.', '2025-12-05'),
 ('God’s Strength in Trials', 'Isaiah 40:31', 'But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint. Rely on God during difficult times.', '2025-12-06'),
 ('Forgiveness and Mercy', 'Ephesians 4:32', 'Be kind to one another, tenderhearted, forgiving one another, as God in Christ forgave you. Practice forgiveness daily and show mercy as God has shown you.', '2025-12-07');
+
