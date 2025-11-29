@@ -2,10 +2,7 @@
 session_start();
 require_once "../config/config.php";
 
-date_default_timezone_set('Asia/Manila'); // adjust to your local timezone
-$today = date('Y-m-d');
-
-// Check if user is logged in
+// Make sure user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
@@ -14,11 +11,12 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $user_name = $_SESSION['user_name'];
 
-// Get today's date
+// Set timezone (adjust as needed)
+date_default_timezone_set('Asia/Manila');
 $today = date('Y-m-d');
 
 // Fetch today's devotion
-$stmt = $conn->prepare("SELECT * FROM devotions WHERE date=? LIMIT 1");
+$stmt = $conn->prepare("SELECT * FROM devotions WHERE DATE(date)=? LIMIT 1");
 $stmt->bind_param("s", $today);
 $stmt->execute();
 $devotion = $stmt->get_result()->fetch_assoc();
@@ -61,6 +59,7 @@ if (isset($_POST['mark_read']) && $devotion && !$is_read) {
         <h4><?= htmlspecialchars($devotion['title']) ?></h4>
         <p><em><?= htmlspecialchars($devotion['scripture']) ?></em></p>
         <p><?= nl2br(htmlspecialchars($devotion['content'])) ?></p>
+
         <?php if ($is_read): ?>
             <p><strong>You have marked this devotion as read ✅</strong></p>
         <?php else: ?>
@@ -68,6 +67,7 @@ if (isset($_POST['mark_read']) && $devotion && !$is_read) {
                 <button type="submit" name="mark_read">Mark as Read</button>
             </form>
         <?php endif; ?>
+
     <?php else: ?>
         <p>No devotion for today.</p>
     <?php endif; ?>
