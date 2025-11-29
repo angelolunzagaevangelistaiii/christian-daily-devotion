@@ -1,4 +1,12 @@
 christian-daily-devotion/
+├─ admin/
+│  ├─ index.php           # Dashboard: list devotions + add/edit/delete
+│  ├─ add_devotion.php
+│  ├─ edit_devotion.php
+│  ├─ delete_devotion.php
+│  ├─ login.php
+│  ├─ logout.php
+│  └─ auth_check.php      # Session protection
 │
 ├── public/
 │   ├── index.php          # Dashboard: today's devotion
@@ -18,4 +26,5 @@ christian-daily-devotion/
 │   └── database.sql
 ├── .gitignore
 └── README.md
+
 
