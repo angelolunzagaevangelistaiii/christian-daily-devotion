@@ -2,6 +2,9 @@
 session_start();
 require_once "../config/config.php";
 
+date_default_timezone_set('Asia/Manila'); // adjust to your local timezone
+$today = date('Y-m-d');
+
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
