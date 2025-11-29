@@ -2,56 +2,45 @@
 session_start();
 require_once "../config/config.php";
 
+// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
 
 $user_id = $_SESSION['user_id'];
+$user_name = $_SESSION['user_name'];
 
-// Get today's devotion
+// Get today's date
 $today = date('Y-m-d');
-$stmt = $conn->prepare("SELECT * FROM devotions WHERE date=? LIMIT 1");
-$stmt->bind_param("s",$today);
-$stmt->execute();
-$result = $stmt->get_result();
-$devotion = $result->fetch_assoc();
 
-// Check if user has read it
-$read = false;
+// Fetch today's devotion
+$stmt = $conn->prepare("SELECT * FROM devotions WHERE date=? LIMIT 1");
+$stmt->bind_param("s", $today);
+$stmt->execute();
+$devotion = $stmt->get_result()->fetch_assoc();
+
+// Check if user already marked it as read
+$is_read = false;
 if ($devotion) {
-    $stmt = $conn->prepare("SELECT status FROM user_progress WHERE user_id=? AND devotion_id=? LIMIT 1");
-    $stmt->bind_param("ii",$user_id,$devotion['id']);
-    $stmt->execute();
-    $res = $stmt->get_result();
-    if ($res->num_rows > 0) {
-        $row = $res->fetch_assoc();
-        $read = ($row['status']=='read');
-    }
+    $stmt2 = $conn->prepare("SELECT * FROM user_progress WHERE user_id=? AND devotion_id=? LIMIT 1");
+    $stmt2->bind_param("ii", $user_id, $devotion['id']);
+    $stmt2->execute();
+    $is_read = $stmt2->get_result()->num_rows > 0;
 }
 
-// Mark as read action
-if (isset($_GET['mark_read']) && $devotion) {
-    if (!$read) {
-        $stmt = $conn->prepare("INSERT INTO user_progress (user_id, devotion_id, status) VALUES (?,?,?) ON DUPLICATE KEY UPDATE status='read'");
-        $status = 'read';
-        $stmt->bind_param("iis",$user_id,$devotion['id'],$status);
-        $stmt->execute();
-    }
+// Fetch user progress: total read vs total devotions
+$total_read = $conn->query("SELECT COUNT(*) as cnt FROM user_progress WHERE user_id=$user_id")->fetch_assoc()['cnt'];
+$total_devotions = $conn->query("SELECT COUNT(*) as cnt FROM devotions")->fetch_assoc()['cnt'];
+
+// Handle marking devotion as read
+if (isset($_POST['mark_read']) && $devotion && !$is_read) {
+    $stmt3 = $conn->prepare("INSERT INTO user_progress (user_id, devotion_id, status) VALUES (?, ?, 'read')");
+    $stmt3->bind_param("ii", $user_id, $devotion['id']);
+    $stmt3->execute();
     header("Location: index.php");
     exit;
 }
-
-// Total devotions read
-$stmt = $conn->prepare("SELECT COUNT(*) AS read_count FROM user_progress WHERE user_id=? AND status='read'");
-$stmt->bind_param("i",$user_id);
-$stmt->execute();
-$res = $stmt->get_result();
-$read_count = $res->fetch_assoc()['read_count'] ?? 0;
-
-// Total devotions
-$res_total = $conn->query("SELECT COUNT(*) AS total FROM devotions");
-$total_devotions = $res_total->fetch_assoc()['total'] ?? 0;
 ?>
 <!DOCTYPE html>
 <html>
@@ -61,24 +50,27 @@ $total_devotions = $res_total->fetch_assoc()['total'] ?? 0;
 </head>
 <body>
 <div class="container">
-    <h2>Welcome, <?= htmlspecialchars($_SESSION['user_name']) ?></h2>
+    <h2>Welcome, <?= htmlspecialchars($user_name) ?></h2>
     <p><a href="logout.php">Logout</a></p>
 
     <h3>Today's Devotion</h3>
-    <?php if($devotion): ?>
+    <?php if ($devotion): ?>
         <h4><?= htmlspecialchars($devotion['title']) ?></h4>
         <p><em><?= htmlspecialchars($devotion['scripture']) ?></em></p>
         <p><?= nl2br(htmlspecialchars($devotion['content'])) ?></p>
-        <?php if(!$read): ?>
-            <a href="?mark_read=1"><button>Mark as Read</button></a>
+        <?php if ($is_read): ?>
+            <p><strong>You have marked this devotion as read ✅</strong></p>
         <?php else: ?>
-            <p><strong>✅ Already read</strong></p>
+            <form method="POST">
+                <button type="submit" name="mark_read">Mark as Read</button>
+            </form>
         <?php endif; ?>
     <?php else: ?>
         <p>No devotion for today.</p>
     <?php endif; ?>
 
-    <p>Progress: <?= $read_count ?>/<?= $total_devotions ?> devotions read</p>
+    <h3>Progress</h3>
+    <p><?= $total_read ?>/<?= $total_devotions ?> devotions read</p>
 </div>
 </body>
 </html>
