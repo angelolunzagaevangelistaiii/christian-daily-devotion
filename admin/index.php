@@ -17,6 +17,7 @@ $devotions = $conn->query("SELECT * FROM devotions ORDER BY date DESC");
     <p><a href="logout.php">Logout</a></p>
     <h3>Manage Devotions</h3>
     <a href="add_devotion.php"><button>Add New Devotion</button></a>
+    <a href="user_progress.php"><button>View User Progress</button></a>
     <table border="1" cellpadding="5" cellspacing="0">
         <tr>
             <th>Title</th>
