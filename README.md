@@ -12,11 +12,16 @@ A web app for Christians to read daily devotions, mark them as read, track progr
 3. Input your MySQL database credentials to `config/config.php`.
 4. Run the app in browser via localhost (XAMPP/MAMP/Laragon).
 
+## Sample Admin
+- Email: `admin@example.com`
+- Password: `123456`
+
 ## Sample User
 - Email: `test@example.com`
 - Password: `123456`
 
 ## Sample Link
 https://software.theholywrit.com/christian-daily-devotion
+
 
 
